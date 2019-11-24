@@ -33,6 +33,10 @@ spec:
           value: "YOUR ABS NODE RPC ENDPOINT"
         - name: KEYVAULT_PRIVATEKEY_URI
           value: "THE URL TO THE ECDSA PRIVATE KEY WITHIN YOUR KEYVAULT"
+        - name: APP_ID
+          value: "THE APP_ID IN ACTIVE DIRECTORY FOR YOUR FUNCTION"
+        - name: APP_SECRET
+          value: "THE APP_SECRET IN ACTIVE DIRECTORY FOR YOUR FUNCTION"
         
 ---
 apiVersion: v1

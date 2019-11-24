@@ -18,9 +18,9 @@ namespace Bobjac.QuorumService.Controllers
     [ApiController]
     public class QuorumContractServiceController : ControllerBase
     {
-        private ILogger logger;
+        private ILogger<QuorumContractServiceController> logger;
 
-        public QuorumContractServiceController(ILogger logger)
+        public QuorumContractServiceController(ILogger<QuorumContractServiceController> logger)
         {
             this.logger = logger;
         }
@@ -36,10 +36,15 @@ namespace Bobjac.QuorumService.Controllers
             var keyVaultURI = Environment.GetEnvironmentVariable("KEYVAULT_PRIVATEKEY_URI", EnvironmentVariableTarget.Process);
             var RPC = Environment.GetEnvironmentVariable("RPC", EnvironmentVariableTarget.Process);
 
+            logger.LogInformation("Retrieved the keyvault uri and RPC endpoint from environment variables - {0}, {1}", keyVaultURI, RPC);
+
             QuorumContractHelper.Instance.SetWeb3Handler(RPC);
 
             var appID = Environment.GetEnvironmentVariable("APP_ID", EnvironmentVariableTarget.Process);
             var appSecret = Environment.GetEnvironmentVariable("APP_SECRET", EnvironmentVariableTarget.Process);
+
+            logger.LogInformation("Retrieved the APP_ID and APP_SECRET from environment variables - {0}, {1}", appID, appSecret);
+
 
             var externalAccount = AccountHelper.BuildExternalSigner(this.logger, keyVaultURI); 
             return GetCreateContractResult(contractInfo.Result, externalAccount, input.inputParams, input.privateFor);
