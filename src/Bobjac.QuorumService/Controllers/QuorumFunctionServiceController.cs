@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
@@ -16,20 +17,22 @@ namespace Bobjac.QuorumService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuorumTransactionServiceController : ControllerBase
+    public class QuorumFunctionServiceController : ControllerBase
     {
         private ILogger<QuorumContractServiceController> logger;
 
-        public QuorumTransactionServiceController(ILogger<QuorumContractServiceController> logger)
+        public QuorumFunctionServiceController(ILogger<QuorumContractServiceController> logger)
         {
             this.logger = logger;
         }
 
         // POST api/values
         [HttpPost()]
-        public async Task<ActionResult<TransactionReturnInfo>> Post([FromBody] QuorumTransactionInput input)
+        public async Task<ActionResult<GetValueTransactionResponse>> Post([FromBody] QuorumTransactionInput input)
         {
-            if (input.functionName == null || String.IsNullOrEmpty(input.contractAddress))
+            this.logger.LogInformation("C# HTTP trigger function processed a request.");
+            
+            if(input.functionName == null || (String.IsNullOrEmpty(input.contractAddress)))
             {
                 return new BadRequestObjectResult("You must supply a contract address and function name");
             }
@@ -41,24 +44,27 @@ namespace Bobjac.QuorumService.Controllers
             dynamic _file = JsonConvert.DeserializeObject(filejson);
 
             var abi = _file?.abi;
+
             var byteCode = _file?.bytecode?.Value;
 
             contractInfo.ContractABI = JsonConvert.SerializeObject(abi);
             contractInfo.ContractByteCode = byteCode;
 
-            var keyVaultURI = Environment.GetEnvironmentVariable("KEYVAULT_PRIVATEKEY_URI", EnvironmentVariableTarget.Process);
+            var accountJSON = Environment.GetEnvironmentVariable("KEYVAULT_ACCOUNT1_URL", EnvironmentVariableTarget.Process);
+            
+            var pwd = Environment.GetEnvironmentVariable("KEYVAULT_ETH_PASSWORD", EnvironmentVariableTarget.Process);
             var RPC = Environment.GetEnvironmentVariable("RPC", EnvironmentVariableTarget.Process);
 
             QuorumContractHelper.Instance.SetWeb3Handler(RPC);
+            //var res = await QuorumContractHelper.Instance.CallContractFunctionAsync<int>(address, contractInfo, functionName, AccountHelper.DecryptAccount(accountJSON,pwd),functionParams);
 
+            var keyVaultURI = Environment.GetEnvironmentVariable("KEYVAULT_PRIVATEKEY_URI", EnvironmentVariableTarget.Process);
             var appID = Environment.GetEnvironmentVariable("APP_ID", EnvironmentVariableTarget.Process);
             var appSecret = Environment.GetEnvironmentVariable("APP_SECRET", EnvironmentVariableTarget.Process);
 
-            var externalAccount = AccountHelper.BuildExternalSigner(this.logger,keyVaultURI); 
-            
-            //var externalAccount = AccountHelper.BuildExternalSignerWithToken(log,keyVaultURI,appID,appSecret); 
-            var res = await QuorumContractHelper.Instance.CreateTransactionWithExternalAccountAsync(input.contractAddress, contractInfo, input.functionName, externalAccount, input.inputParams, input.privateFor);
-            return CreatedAtAction(nameof(Get), new { hashCode = res.TransactionHash },  res); 
+            var externalAccount = AccountHelper.BuildExternalSignerWithToken(this.logger,keyVaultURI,appID,appSecret); 
+            var res = await QuorumContractHelper.Instance.CallContractFunctionAsync<int>(input.contractAddress, contractInfo, input.functionName, externalAccount.Address, input.inputParams);
+            return new GetValueTransactionResponse { Value = res}; 
         }
 
         // GET api/values/5

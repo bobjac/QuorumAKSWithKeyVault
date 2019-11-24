@@ -47,12 +47,12 @@ namespace Bobjac.QuorumService.Controllers
 
             var externalAccount = AccountHelper.BuildExternalSigner(this.logger, keyVaultURI);
             var transactionInfo = await ExecuteBlockchainTransaction(contractInfo, externalAccount, input.inputParams, input.privateFor);
-            return CreatedAtAction(nameof(Get), new { id = transactionInfo.TransactionHash },  transactionInfo); 
+            return CreatedAtAction(nameof(Get), new { hashCode = transactionInfo.TransactionHash },  transactionInfo); 
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        [HttpGet("{hashCode}")]
+        public ActionResult<string> Get(string hashCode)
         {
             return "value";
         }
