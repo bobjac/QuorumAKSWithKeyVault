@@ -13,12 +13,13 @@ spec:
     metadata:
       labels:
         app: quorumservice
+        aadpodidbinding: <selector value from AzureIdentityBinding resource>
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
       - name: mymicroservice
-        image: bobjacfoodsafety.azurecr.io/quorumservice:v1
+        image: bobjacfoodsafety.azurecr.io/quorumservice:v2
         ports:
         - containerPort: 80
         resources:
