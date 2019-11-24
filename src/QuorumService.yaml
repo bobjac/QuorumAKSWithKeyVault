@@ -26,6 +26,14 @@ spec:
             cpu: 250m
           limits:
             cpu: 500m
+        env:
+        - name: CONTRACT_JSON_BLOB_URL
+          value: "UPLOAD YOUR CONTRACT JSON FROM COMPILATION TO A BLOB STORAGE ACCOUNT"
+        - name: RPC 
+          value: "YOUR ABS NODE RPC ENDPOINT"
+        - name: KEYVAULT_PRIVATEKEY_URI
+          value: "THE URL TO THE ECDSA PRIVATE KEY WITHIN YOUR KEYVAULT"
+        
 ---
 apiVersion: v1
 kind: Service
