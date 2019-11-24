@@ -26,12 +26,12 @@ namespace Bobjac.QuorumService.Controllers
         }
 
         // POST api/values
-        [HttpPost]
-        public Task<IActionResult> Post([FromBody] QuorumTransactionInput input)
+        [HttpPost()]
+        public async Task<ActionResult<TransactionReturnInfo>> Post([FromBody] QuorumTransactionInput input)
         {
             logger.LogInformation("Received request to create new contract");
 
-            var contractInfo = GetContractInfo();
+            var contractInfo = await GetContractInfo();
 
             var keyVaultURI = Environment.GetEnvironmentVariable("KEYVAULT_PRIVATEKEY_URI", EnvironmentVariableTarget.Process);
             var RPC = Environment.GetEnvironmentVariable("RPC", EnvironmentVariableTarget.Process);
@@ -45,18 +45,28 @@ namespace Bobjac.QuorumService.Controllers
 
             logger.LogInformation("Retrieved the APP_ID and APP_SECRET from environment variables - {0}, {1}", appID, appSecret);
 
-
-            var externalAccount = AccountHelper.BuildExternalSigner(this.logger, keyVaultURI); 
-            return GetCreateContractResult(contractInfo.Result, externalAccount, input.inputParams, input.privateFor);
+            var externalAccount = AccountHelper.BuildExternalSigner(this.logger, keyVaultURI);
+            var transactionInfo = await ExecuteBlockchainTransaction(contractInfo, externalAccount, input.inputParams, input.privateFor);
+            return CreatedAtAction(nameof(Get), new { id = transactionInfo.TransactionHash },  transactionInfo); 
         }
 
-        private async Task<IActionResult> GetCreateContractResult(ContractInfo contractInfo, 
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public ActionResult<string> Get(int id)
+        {
+            return "value";
+        }
+
+        private async Task<TransactionReturnInfo> ExecuteBlockchainTransaction(ContractInfo contractInfo, 
             ExternalAccount externalAccount, object[] inputParams, List<string> privateFor)
         {
-            var res = await QuorumContractHelper.Instance.CreateContractWithExternalAccountAsync(contractInfo, externalAccount, inputParams, privateFor);
-            return res != null
+            /*return res != null
                 ? (ActionResult)new OkObjectResult($"TXHash: {res.TransactionHash} \nBlockHash: {res.BlockHash} \nBlockNumber: {res.BlockNumber} \nContractAddress: {res.ContractAddress}")
                 : new BadRequestObjectResult("There was an issue submitting the transaction");
+                */
+
+            var res = await QuorumContractHelper.Instance.CreateContractWithExternalAccountAsync(contractInfo, externalAccount, inputParams, privateFor);
+            return res;
         }
 
         private async Task<ContractInfo> GetContractInfo()
