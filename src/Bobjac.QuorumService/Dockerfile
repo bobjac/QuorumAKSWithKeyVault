@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
 WORKDIR /src
-COPY myMicroservice.csproj .
+COPY Bobjac.QuorumService.csproj .
 RUN dotnet restore
 COPY . .
 RUN dotnet publish -c release -o /app
