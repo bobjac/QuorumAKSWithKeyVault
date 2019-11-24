@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
+using Bobjac.QuorumService.Models;
+
 namespace Bobjac.QuorumService.Controllers
 {
     [Route("api/[controller]")]
