@@ -2,13 +2,13 @@ version: '3'
 services:
   quorumservice:
     build: ./Bobjac.QuorumService
-    image: quorumservice
-    container_name: quorumservice
+    image: quorumservice:v2
+    container_name: quorumservice2
     environment:
       REDIS: azure-vote-back
-      CONTRACT_JSON_BLOB_URL: UPLOAD YOUR CONTRACT JSON FROM COMPILATION TO A BLOB STORAGE "UPLOAD YOUR CONTRACT JSON FROM COMPILATION TO A BLOB STORAGE ACCOUNT
-      RPC: YOUR ABS NODE RPC ENDPOINT
-      KEYVAULT_PRIVATEKEY_URI: THE URL TO THE ECDSA PRIVATE KEY WITHIN YOUR KEYVAULT
+      CONTRACT_JSON_BLOB_URL: https://bobjac.blob.core.windows.net/abi/SimpleStorage.json
+      RPC: https://bobjac1.blockchain.azure.com:3200/a48zCsASxpWcxLf8l2Xo4RWG
+      KEYVAULT_PRIVATEKEY_URI: https://bobjac.vault.azure.net/keys/MyKey/db58747d79c3494eb212107e1f42cabe
       APP_ID: THE APP_ID IN ACTIVE DIRECTORY FOR YOUR FUNCTION
       APP_SECRET: THE APP_SECRET IN ACTIVE DIRECTORY FOR YOUR FUNCTION
     ports:
