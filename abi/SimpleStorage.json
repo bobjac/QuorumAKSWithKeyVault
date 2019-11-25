@@ -1,0 +1,92 @@
+{
+    "abi": [
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "storedData",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "x",
+                    "type": "uint256"
+                }
+            ],
+            "name": "set",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "get",
+            "outputs": [
+                {
+                    "name": "retVal",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "name": "initVal",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "name": "message",
+                    "type": "string"
+                },
+                {
+                    "indexed": false,
+                    "name": "newVal",
+                    "type": "uint256"
+                }
+            ],
+            "name": "Change",
+            "type": "event"
+        }
+    ],
+    "bytecode": "608060405234801561001057600080fd5b506040516020806102108339810180604052602081101561003057600080fd5b50516040805160208101839052818152600b818301527f696e697469616c697a6564000000000000000000000000000000000000000000606082015290517fbb1cb5be1009ed69d54a8f3da20ed253be50c4dbbcade4f0a12114dedd9be5d79181900360800190a1600055610166806100aa6000396000f3fe6080604052600436106100565763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416632a1afcd9811461005b57806360fe47b1146100825780636d4ce63c146100ae575b600080fd5b34801561006757600080fd5b506100706100c3565b60408051918252519081900360200190f35b34801561008e57600080fd5b506100ac600480360360208110156100a557600080fd5b50356100c9565b005b3480156100ba57600080fd5b50610070610134565b60005481565b60408051602081018390528181526003818301527f7365740000000000000000000000000000000000000000000000000000000000606082015290517fbb1cb5be1009ed69d54a8f3da20ed253be50c4dbbcade4f0a12114dedd9be5d79181900360800190a1600055565b6000549056fea165627a7a723058203fa8516b58afc317e06d1b87d4a5619c78552b79032d9f4954baa6c7fb129cbd0029",
+    "functionHashes": {
+        "get()": "6d4ce63c",
+        "set(uint256)": "60fe47b1",
+        "storedData()": "2a1afcd9"
+    },
+    "gasEstimates": {
+        "creation": {
+            "codeDepositCost": "71600",
+            "executionCost": "22066",
+            "totalCost": "93666"
+        },
+        "external": {
+            "get()": "428",
+            "set(uint256)": "22082",
+            "storedData()": "384"
+        }
+    }
+}

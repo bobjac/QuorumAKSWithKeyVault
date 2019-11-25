@@ -79,3 +79,5 @@ Create a storage account and create a container within "Blobs" that has anonymou
 
 Upload the JSON file to the blob container. For an example JSON file generated from a contract compilation (SimpleStorage) please take a look here: https://mahdiattachments.blob.core.windows.net/attachments/SimpleStorage.json
 
+
+
