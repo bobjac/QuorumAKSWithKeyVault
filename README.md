@@ -68,7 +68,7 @@ Click on Keys, then, Generate An Elliptic Curve Key using the SECP256K1 Curve:
 ![](img/kv2.png)
 ![](img/kv3.png)
 
-Next, Grab the URL of the above Key and paste it into the value for "KEYVAULT_PRIVATEKEY_URI"
+Next, Grab the URL of the above Key and paste it into the value for "KEYVAULT_PRIVATEKEY_URI" of the QuorumService.yaml file.
 
 ## Create a Storage Account to hold our Smart Contract JSON file
 
@@ -79,6 +79,8 @@ Create a storage account and create a container within "Blobs" that has anonymou
 
 Upload the JSON file to the blob container. For an example JSON file generated from a contract compilation (SimpleStorage) please take a look here: https://raw.githubusercontent.com/bobjac/QuorumAKSWithKeyVault/master/abi/SimpleStorage.json.
 
+Update the CONTRACT_JSON_BLOB_URL value in the QuorumService.yaml file url of the uploaded smart contract json file.
+
 ## Create and AKS Cluster with AAD Pod Identity Deployed
 
 All microservice code will be containerized and deployed to Azure Kubernetes Service. The containers in AKS will need to access the Azure Key Vault that is storing the key that was generated in the step above, and this sample will use Azure Managed Service Identity to ensure that no credentails to the Azure Key Vault are ever given to the developers of the microservices. AAD Pod Identity is a project that enabled AKS pods to take on the identity of the Azure Managed Service Identity resource, so administrators can grant the managed service identity access to the Azure Key Vault without requiring the developers to know the credentails of the service principal.
@@ -87,3 +89,16 @@ Details on creating the Azure Kubernetes Service cluster, as well as deploying t
 
 ## Grant the Managed Service Identity Access to the Azure Key Vault
 
+Go back to your KeyVault resource, and click on Access Policies -> Add Access Policy
+
+Becase we only need access to the Key, use "Select All" under Key Permissions for simplicity. 
+
+**NOTE:** In practice, don't grant the "Select All" Property, we really only need GET, LIST and SIGN operations, so if you'd like to keep it those three, please do that instead. 
+
+Under "Select Principal", search for the name of the managed service identity that was created in the insturctions found at https://github.com/Azure/aad-pod-identity. This will allow you to grant access to the Azure Key Vault for the AKS pod.
+
+![](img/kv4.png)
+
+At this point we're done! Make sure your KeyVault policies are saved. You have now granted the AKS deployment/pod access to your KeyVault Key. 
+
+We can use the URL to the Private Key and AKS will automatically grant access to it behnid the scenes. 
