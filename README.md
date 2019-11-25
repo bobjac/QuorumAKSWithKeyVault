@@ -79,5 +79,11 @@ Create a storage account and create a container within "Blobs" that has anonymou
 
 Upload the JSON file to the blob container. For an example JSON file generated from a contract compilation (SimpleStorage) please take a look here: https://raw.githubusercontent.com/bobjac/QuorumAKSWithKeyVault/master/abi/SimpleStorage.json.
 
+## Create and AKS Cluster with AAD Pod Identity Deployed
 
+All microservice code will be containerized and deployed to Azure Kubernetes Service. The containers in AKS will need to access the Azure Key Vault that is storing the key that was generated in the step above, and this sample will use Azure Managed Service Identity to ensure that no credentails to the Azure Key Vault are ever given to the developers of the microservices. AAD Pod Identity is a project that enabled AKS pods to take on the identity of the Azure Managed Service Identity resource, so administrators can grant the managed service identity access to the Azure Key Vault without requiring the developers to know the credentails of the service principal.
+
+Details on creating the Azure Kubernetes Service cluster, as well as deploying the necessary AAD Pod Identity Resources can be found at the AAD Pod Identity Repository at https://github.com/Azure/aad-pod-identity.
+
+## Grant the Managed Service Identity Access to the Azure Key Vault
 
