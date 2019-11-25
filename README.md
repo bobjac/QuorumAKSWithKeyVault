@@ -49,3 +49,33 @@ This sample comes complete with a local.settings.json file that has a few Enviro
 4. An AKS cluster with AAD Pod Identity Deployed.
 5. (Optional) A Service Principal for the KeyVault above so we can grab the key when deploying our function locally with an Application ID and associated Secret
 
+# Getting Started
+
+## Creating an Azure Blockchain Service Node 
+
+Create a new Azure Blockchain Service node and make a note of the RPC Endpoint by going to Transaction Nodes -> Click on your Node -> Access Keys. Use this value for "RPC"
+
+![](img/abs.png)
+
+## Create an Azure Key Vault and a Private Key
+
+Create an Azure KeyVault and skip the steps pertaining to Access Policies and Virtual Network: 
+
+![](img/kv1.png)
+
+Click on Keys, then, Generate An Elliptic Curve Key using the SECP256K1 Curve:
+
+![](img/kv2.png)
+![](img/kv3.png)
+
+Next, Grab the URL of the above Key and paste it into the value for "KEYVAULT_PRIVATEKEY_URI"
+
+## Create a Storage Account to hold our Smart Contract JSON file
+
+Create a storage account and create a container within "Blobs" that has anonymous read access for blobs:
+
+![](img/blob1.png)
+![](img/blob2.png)
+
+Upload the JSON file to the blob container. For an example JSON file generated from a contract compilation (SimpleStorage) please take a look here: https://mahdiattachments.blob.core.windows.net/attachments/SimpleStorage.json
+
