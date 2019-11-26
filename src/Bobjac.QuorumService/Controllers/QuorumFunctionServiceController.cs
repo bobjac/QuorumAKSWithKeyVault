@@ -62,7 +62,8 @@ namespace Bobjac.QuorumService.Controllers
             var appID = Environment.GetEnvironmentVariable("APP_ID", EnvironmentVariableTarget.Process);
             var appSecret = Environment.GetEnvironmentVariable("APP_SECRET", EnvironmentVariableTarget.Process);
 
-            var externalAccount = AccountHelper.BuildExternalSignerWithToken(this.logger,keyVaultURI,appID,appSecret); 
+            //var externalAccount = AccountHelper.BuildExternalSignerWithToken(this.logger,keyVaultURI,appID,appSecret); 
+            var externalAccount = AccountHelper.BuildExternalSigner(this.logger, keyVaultURI);
             var res = await QuorumContractHelper.Instance.CallContractFunctionAsync<int>(input.contractAddress, contractInfo, input.functionName, externalAccount.Address, input.inputParams);
             return new GetValueTransactionResponse { Value = res}; 
         }
