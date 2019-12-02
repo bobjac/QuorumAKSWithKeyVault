@@ -87,6 +87,8 @@ All microservice code will be containerized and deployed to Azure Kubernetes Ser
 
 Details on creating the Azure Kubernetes Service cluster, as well as deploying the necessary AAD Pod Identity Resources can be found at the AAD Pod Identity Repository at https://github.com/Azure/aad-pod-identity.
 
+You should also go through the public documentation for buildin a Docker container, deploying to Azure Container Registry and pushing to AKS.
+
 ## Grant the Managed Service Identity Access to the Azure Key Vault
 
 Go back to your KeyVault resource, and click on Access Policies -> Add Access Policy
@@ -102,3 +104,11 @@ Under "Select Principal", search for the name of the managed service identity th
 At this point we're done! Make sure your KeyVault policies are saved. You have now granted the AKS deployment/pod access to your KeyVault Key. 
 
 We can use the URL to the Private Key and AKS will automatically grant access to it behnid the scenes. 
+
+## Build Quorum Service Docker image
+
+You will find a docker file located at /src/Bobjac.QuorumService. Build the container image using the standard docker command line tools and deploy to Azure Container Registry.  
+
+## Deploy microservice to AKS
+
+Replace the container image (currently bobjacfoodsafety.azurecr.io/quorumservice:v2) in the QuorumService.yaml file. You should also replace all of the environment variables with vaules that are specific to you deployment, such as your contract blob url, Azure Blockchain Service endpoint, etc.  After modifying the QuorumService.yaml file, deploy it using standard kubernetes techniques.
