@@ -12,8 +12,6 @@ It demonstrates the following concepts that are important in Enterprise blockcha
 
 3. A helper class named "QuorumTransactionManager" that handles deployment and calling smart contracts. The class contains methods that do a variety of things asynchronously. The class is meant to be generic in that it works for ANY smart contract, so long as you supply the appropriate parameters.
 
-With this sample, we demonstrate a scenario where the details of the Private Key are stored securely in the cloud and we create our Ethereum account on the fly from the details of that key. 
-
 This sample is an extension of the project hosted at https://github.com/malirezai/QuorumFunctionWithKeyVault by Mahdi Alirezaie.
 
 ## Project references:
