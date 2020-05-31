@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo
+  labels:
+    aadpodidbinding: foodsafetyt20
+spec:
+  containers:
+  - name: demo
+    image: mcr.microsoft.com/k8s/aad-pod-identity/demo:1.2
+    args:
+      - --subscriptionid=2e467bcc-ec84-4430-a27f-beac4ec94251
+      - --clientid=0461744e-e1bd-4dd6-b9b3-95d63bf615de
+      - --resourcegroup=MC_foodsafetyt20_foodsafetyt20_eastus
+    env:
+      - name: MY_POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: MY_POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: MY_POD_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP
+  nodeSelector:
+    kubernetes.io/os: linux
