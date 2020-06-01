@@ -1,7 +1,7 @@
 apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentityBinding
 metadata:
-  name: demo1-azure-identity-binding
+  name: foodsafetyt20-binding
 spec:
-  AzureIdentity: <a-idname>
-  Selector: <label value to match>
+  azureIdentity: foodsafetyt20
+  selector: foodsafetyt20

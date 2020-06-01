@@ -55,7 +55,7 @@ namespace Bobjac.QuorumService.Utilities
             return new Account(secretBundle.Value);
         }
 
-         public static ExternalAccount BuildExternalSigner(ILogger log, string KeyVaultURI){
+         public static async Task<ExternalAccount> BuildExternalSigner(ILogger log, string KeyVaultURI){
 
             var azureServiceTokenProvider = new AzureServiceTokenProvider();
             var keyVaultClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
@@ -64,9 +64,9 @@ namespace Bobjac.QuorumService.Utilities
             {
                 var signer = new AzureKeyVaultExternalSigner(keyVaultClient,KeyVaultURI);
                 
-                var address = signer.GetAddressAsync();
+                var address = await signer.GetAddressAsync();
 
-                log.LogInformation("Signer Address: "+ address);
+                Console.WriteLine("Signer Address: "+ address);
 
                 return new ExternalAccount(signer);
             }
@@ -77,7 +77,7 @@ namespace Bobjac.QuorumService.Utilities
             }
         }
 
-        public static ExternalAccount BuildExternalSignerWithToken(ILogger log, string KeyVaultURI, string appID, string appSecret){
+        public static async Task<ExternalAccount> BuildExternalSignerWithToken(ILogger log, string KeyVaultURI, string appID, string appSecret){
             
             APP_ID = appID;
             APP_SECRET = appSecret;
@@ -88,9 +88,9 @@ namespace Bobjac.QuorumService.Utilities
 
                 var signer = new AzureKeyVaultExternalSigner(keyVaultClient,KeyVaultURI);
 
-                var address = signer.GetAddressAsync();
+                var address = await signer.GetAddressAsync();
 
-                log.LogInformation("Signer Address: "+ address);
+                Console.WriteLine("Signer Address: "+ address);
 
                 return new ExternalAccount(signer);
             }

@@ -1,8 +1,8 @@
 apiVersion: "aadpodidentity.k8s.io/v1"
 kind: AzureIdentity
 metadata:
-  name: <a-idname>
+  name: foodsafetyt20
 spec:
   type: 0
-  ResourceID: /subscriptions/<subid>/resourcegroups/<resourcegroup>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<name>
-  ClientID: <clientId>
+  resourceID: /subscriptions/2e467bcc-ec84-4430-a27f-beac4ec94251/resourcegroups/MC_foodsafetyt20_foodsafetyt20_eastus/providers/Microsoft.ManagedIdentity/userAssignedIdentities/foodsafetyt20
+  clientID: 0461744e-e1bd-4dd6-b9b3-95d63bf615de

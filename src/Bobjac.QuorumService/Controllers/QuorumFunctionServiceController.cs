@@ -28,9 +28,9 @@ namespace Bobjac.QuorumService.Controllers
 
         // POST api/values
         [HttpPost()]
-        public async Task<ActionResult<GetValueTransactionResponse>> Post([FromBody] QuorumTransactionInput input)
+        public async Task<ActionResult<GetRecordByIndexResponse>> Post([FromBody] QuorumTransactionInput input)
         {
-            this.logger.LogInformation("C# HTTP trigger function processed a request.");
+            Console.WriteLine("C# HTTP trigger function processed a request.");
             
             if(input.functionName == null || (String.IsNullOrEmpty(input.contractAddress)))
             {
@@ -63,9 +63,11 @@ namespace Bobjac.QuorumService.Controllers
             var appSecret = Environment.GetEnvironmentVariable("APP_SECRET", EnvironmentVariableTarget.Process);
 
             //var externalAccount = AccountHelper.BuildExternalSignerWithToken(this.logger,keyVaultURI,appID,appSecret); 
-            var externalAccount = AccountHelper.BuildExternalSigner(this.logger, keyVaultURI);
-            var res = await QuorumContractHelper.Instance.CallContractFunctionAsync<int>(input.contractAddress, contractInfo, input.functionName, externalAccount.Address, input.inputParams);
-            return new GetValueTransactionResponse { Value = res}; 
+            var externalAccount = await AccountHelper.BuildExternalSigner(this.logger, keyVaultURI);
+            //var res = await QuorumContractHelper.Instance.CallContractFunctionAsync<int>(input.contractAddress, contractInfo, input.functionName, externalAccount.Address, input.inputParams);
+            var res = await QuorumContractHelper.Instance.CallContractFunctionAsync<GetRecordByIndexResponse>(input.contractAddress, contractInfo, input.functionName, externalAccount.Address, input.inputParams);
+            //return new GetRecordByIndexResponse { SensorId = res.SensorId}
+            return res;
         }
 
         // GET api/values/5

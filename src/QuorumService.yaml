@@ -13,13 +13,13 @@ spec:
     metadata:
       labels:
         app: quorumservice
-        aadpodidbinding: <selector value from AzureIdentityBinding resource>
+        aadpodidbinding: foodsafetyt20
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
-      - name: mymicroservice
-        image: bobjacfoodsafety.azurecr.io/quorumservice:v2
+      - name: quorum-api
+        image: foodsafetyt20.azurecr.io/quorum-api:v12
         ports:
         - containerPort: 80
         resources:
@@ -29,11 +29,11 @@ spec:
             cpu: 500m
         env:
         - name: CONTRACT_JSON_BLOB_URL
-          value: "UPLOAD YOUR CONTRACT JSON FROM COMPILATION TO A BLOB STORAGE ACCOUNT"
+          value: "https://foodsafetyt20.blob.core.windows.net/smartcontracts/FoodSafety.json"
         - name: RPC 
-          value: "YOUR ABS NODE RPC ENDPOINT"
+          value: "https://bobjacfoodsafetyt20.blockchain.azure.com:3200/zpauIGYHVNni-AxLQC5ypgLs"
         - name: KEYVAULT_PRIVATEKEY_URI
-          value: "THE URL TO THE ECDSA PRIVATE KEY WITHIN YOUR KEYVAULT"
+          value: "https://foodsafetyt20.vault.azure.net/keys/foodsafetyt20/63bbbc6852d6451d95adaf8fed735a7c"
         - name: APP_ID
           value: "THE APP_ID IN ACTIVE DIRECTORY FOR YOUR FUNCTION"
         - name: APP_SECRET

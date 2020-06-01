@@ -128,10 +128,12 @@ namespace Bobjac.QuorumService.Utilities
 
 
             await externalAccount.InitialiseAsync();
+            Console.WriteLine("externalAccount InitializeAsync() completed");
             externalAccount.InitialiseDefaultTransactionManager(web3.Client);
-
+            Console.WriteLine("externalAccount.InitialiseDefaultTransactionManager() completed");
             //--- get transaction count to set nonce ---// 
             var txCount = await web3.Eth.Transactions.GetTransactionCount.SendRequestAsync(externalAccount.Address, BlockParameter.CreatePending());
+            Console.WriteLine("web3.Eth.Transactions.GetTransactionCount.SendRequestAsync() completed");
             try
             {
                 var gasDeploy = await web3.Eth.DeployContract.EstimateGasAsync(
@@ -145,11 +147,13 @@ namespace Bobjac.QuorumService.Utilities
                 // Gas estimate is usually low - with private quorum we don't need to worry about gas so lets just multiply it by 5.
                 var realGas = new HexBigInteger(gasDeploy.Value*5);
 
+                Console.WriteLine("About to call web3.Eth.DeployContract.GetData");
                 var txData = web3.Eth.DeployContract.GetData(
                     contractInfo.ContractByteCode,
                     contractInfo.ContractABI,
                     inputParams
                 );
+                Console.WriteLine("Returned from web3.Eth.DeployContract.GetData with the returned data of: {0}", txData);
 
                 var txInput = new TransactionInput(
                     txData,
@@ -158,8 +162,9 @@ namespace Bobjac.QuorumService.Utilities
                     new HexBigInteger(0)
                 );
 
-
+                Console.WriteLine("About to call externalAccount.TransactionManager.SendTransactionAndWaitForReceiptAsync");
                 var transactionReceipt = await externalAccount.TransactionManager.SendTransactionAndWaitForReceiptAsync(txInput,null);
+                Console.WriteLine("Returned from externalAccount.TransactionManager.SendTransactionAndWaitForReceiptAsync");
                 Console.WriteLine(transactionReceipt.ContractAddress);
 
                 return new TransactionReturnInfo
@@ -342,18 +347,20 @@ namespace Bobjac.QuorumService.Utilities
             }
         }
 
-        public async Task<T> CallContractFunctionAsync<T>(string contractAddress, ContractInfo contractInfo, string functionName, string accountAddress, object[] inputParams = null)
+        public async Task<GetRecordByIndexResponse> CallContractFunctionAsync<T>(string contractAddress, ContractInfo contractInfo, string functionName, string accountAddress, object[] inputParams = null)
         {
             try
             {
                 var contract = web3.Eth.GetContract(contractInfo.ContractABI, contractAddress);
                 var function = contract.GetFunction(functionName);
-                return await function.CallAsync<T>(accountAddress, null, null, inputParams);
+
+               // return await function.CallAsync<T>(accountAddress, null, null, inputParams);
+                return await function.CallDeserializingToObjectAsync<GetRecordByIndexResponse>(accountAddress, null, null, inputParams);
             } 
             catch(Exception e)
             {
                 Console.WriteLine(e.Message);
-                return default(T);
+                return new GetRecordByIndexResponse();
             }
         }
     }
