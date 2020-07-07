@@ -69,18 +69,20 @@ namespace Bobjac.QuorumService.Utilities
 
             try
             {
-
+/*
                 var gasDeploy = await web3.Eth.DeployContract.EstimateGasAsync(
                     abi: contractInfo.ContractABI,
                     contractByteCode: contractInfo.ContractByteCode,
                     from: account.Address,
-                    values: inputParams == null ? new object[]{} : inputParams);
-
+                    values: inputParams == null ? new object[]{0} : inputParams);
+*/
                 Console.WriteLine("Creating new contract and waiting for address");
 
                 // COULD ALSO USE TransactionService.DeployContractAndWaitForAddress
                 // Gas estimate is usually low - with private quorum we don't need to worry about gas so lets just multiply it by 5.
-                var realGas = new HexBigInteger(gasDeploy.Value*5);
+                var realGas = new HexBigInteger(50000);
+                //var realGas = new HexBigInteger(gasDeploy.Value*5);
+
 
                 var transactionReceipt = await TransactionService.DeployContractAndWaitForReceiptAsync(() =>
 
@@ -136,16 +138,18 @@ namespace Bobjac.QuorumService.Utilities
             Console.WriteLine("web3.Eth.Transactions.GetTransactionCount.SendRequestAsync() completed");
             try
             {
+                /*
                 var gasDeploy = await web3.Eth.DeployContract.EstimateGasAsync(
                     abi: contractInfo.ContractABI,
                     contractByteCode: contractInfo.ContractByteCode,
                     from: externalAccount.Address,
-                    values: inputParams == null ? new object[]{} : inputParams);
+                    values: inputParams == null ? new object[]{} : inputParams); */
 
                 Console.WriteLine("Creating new contract and waiting for address");
 
                 // Gas estimate is usually low - with private quorum we don't need to worry about gas so lets just multiply it by 5.
-                var realGas = new HexBigInteger(gasDeploy.Value*5);
+                var realGas = new HexBigInteger(50000000);
+                //var realGas = new HexBigInteger(gasDeploy.Value*5);
 
                 Console.WriteLine("About to call web3.Eth.DeployContract.GetData");
                 var txData = web3.Eth.DeployContract.GetData(

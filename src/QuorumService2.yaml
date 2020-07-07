@@ -1,0 +1,52 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: t20
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: t20
+        aadpodidbinding: t20
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: quorum-api
+        image: foodsafetyt20.azurecr.io/quorum-api:v16
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: CONTRACT_JSON_BLOB_URL
+          value: "https://t20abi.blob.core.windows.net/api/FoodSafety.json"
+        - name: RPC 
+          value: "https://t20.blockchain.azure.com:3200/63w8iFtd33P9dxWwh32RuH11"
+        - name: KEYVAULT_PRIVATEKEY_URI
+          value: "https://t20.vault.azure.net/keys/t20/aa6a4c77319546b7b09b7da441475d3a"
+        - name: APP_ID
+          value: "THE APP_ID IN ACTIVE DIRECTORY FOR YOUR FUNCTION"
+        - name: APP_SECRET
+          value: "THE APP_SECRET IN ACTIVE DIRECTORY FOR YOUR FUNCTION"
+        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: t20
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: t20
